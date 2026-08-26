@@ -1,11 +1,11 @@
 :root { color-scheme: light dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; }
 * { box-sizing: border-box; }
 body { margin: 0; background: Canvas; color: CanvasText; }
-.app-shell { width: min(52rem, calc(100% - 2rem)); margin: 2rem auto; }
-header { margin-bottom: 1.5rem; }
+.app-shell { width: min(76rem, calc(100% - 2rem)); margin: 2rem auto; }
+header { margin-bottom: 1.5rem; max-width: 52rem; }
 h1 { margin: .15rem 0 .5rem; line-height: 1.1; }
 .eyebrow { margin: 0; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: .8rem; }
-.lede, .muted { color: color-mix(in srgb, CanvasText 70%, Canvas); }
+.lede, .muted, .review-meta { color: color-mix(in srgb, CanvasText 70%, Canvas); }
 .panel { border: 1px solid color-mix(in srgb, CanvasText 25%, Canvas); border-radius: .75rem; padding: 1.25rem; margin: 1rem 0; }
 label, select, button { font: inherit; }
 label { display: block; font-weight: 650; margin-bottom: .35rem; }
@@ -24,8 +24,19 @@ legend { font-weight: 700; }
 .actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.25rem; }
 .secondary { margin-left: auto; }
 .score-summary { font-size: 1.15rem; font-weight: 650; margin-bottom: 1rem; }
+.results-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .85fr); gap: 1rem; align-items: start; }
+.results-grid .panel { margin-top: 0; }
+.performance-report { position: sticky; top: 1rem; }
+.report-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.report-table th, .report-table td { padding: .45rem .35rem; border-bottom: 1px solid color-mix(in srgb, CanvasText 18%, Canvas); text-align: left; }
+.report-table th { font-weight: 700; }
+.performance-report h3 { margin-top: 1.25rem; }
+.performance-report h4 { margin-bottom: .25rem; }
+.performance-report ul { margin-top: .25rem; padding-left: 1.25rem; }
 .review-item { border-top: 1px solid color-mix(in srgb, CanvasText 20%, Canvas); padding: 1rem 0; }
-.review-item h4 { margin-bottom: .35rem; }
+.review-item h4 { margin-bottom: .25rem; }
+.review-meta { margin: 0 0 .4rem; font-size: .9rem; font-weight: 650; }
 .correct { font-weight: 700; }
 footer { margin-top: 1.5rem; color: color-mix(in srgb, CanvasText 65%, Canvas); }
-@media (max-width: 32rem) { .app-shell { width: min(100% - 1rem, 52rem); margin: .75rem auto; } .panel { padding: 1rem; } .secondary { margin-left: 0; } .actions button { flex: 1 1 8rem; } }
+@media (max-width: 52rem) { .results-grid { grid-template-columns: 1fr; } .performance-report { position: static; } }
+@media (max-width: 32rem) { .app-shell { width: min(100% - 1rem, 76rem); margin: .75rem auto; } .panel { padding: 1rem; } .secondary { margin-left: 0; } .actions button { flex: 1 1 8rem; } .report-table { font-size: .8rem; } }
