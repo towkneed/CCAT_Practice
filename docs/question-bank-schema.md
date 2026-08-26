@@ -49,6 +49,27 @@ The application discovers test objects dynamically. Adding a valid test should n
 - `answer` — zero-based integer index into `choices`.
 - `explanation` — non-empty explanation shown only after completion.
 
+## Optional spatial figure
+
+A question that requires a visual stimulus may include a `figure` object:
+
+```json
+"figure": {
+  "type": "svg",
+  "src": "./assets/spatial/rotation-01.svg",
+  "alt": "Reference shape followed by five candidate rotations."
+}
+```
+
+The initial figure contract is deliberately narrow:
+
+- `type` must be `svg`.
+- `src` must be a relative `.svg` path directly under `./assets/spatial/`; remote URLs and arbitrary local paths are rejected.
+- `alt` is required and must meaningfully describe the figure for accessibility.
+- SVG files are repository-owned static assets. Do not embed scripts, remote resources, proprietary imagery, or copied assessment material.
+
+Keeping figures as external static assets avoids placing executable SVG markup inside the question JSON and lets the browser render them through an image element rather than injecting markup into the document.
+
 ## Validation
 
 `src/core.js` validates the bank before a test can start. Invalid banks fail closed and produce an actionable load error rather than beginning a partially defined test.
