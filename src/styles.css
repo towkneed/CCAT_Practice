@@ -19,6 +19,8 @@ button:focus-visible, select:focus-visible, input:focus-visible { outline: 3px s
 fieldset { border: 0; padding: 0; margin: 0; }
 legend { font-weight: 700; }
 .question-text { font-size: 1.15rem; font-weight: 600; }
+.question-figure, .review-figure { margin: .75rem 0 1rem; overflow-x: auto; }
+.question-figure-image { display: block; width: min(100%, 48rem); height: auto; padding: .5rem; border: 1px solid color-mix(in srgb, CanvasText 18%, Canvas); border-radius: .45rem; background: Canvas; color: CanvasText; }
 .choice { display: flex; align-items: flex-start; gap: .7rem; padding: .7rem; margin: .4rem 0; border: 1px solid color-mix(in srgb, CanvasText 20%, Canvas); border-radius: .45rem; }
 .choice input { margin-top: .3rem; flex: 0 0 auto; }
 .actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.25rem; }
