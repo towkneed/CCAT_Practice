@@ -17,11 +17,37 @@ Question banks are particularly welcome. Please ensure every submitted question:
 
 Do not submit copyrighted or confidential assessment material.
 
+### Spatial-question contributions
+
+Spatial questions may reference repository-owned SVG assets under `assets/spatial/` using the constrained `figure` contract documented in [`docs/question-bank-schema.md`](docs/question-bank-schema.md).
+
+For each spatial question:
+
+- create original geometry rather than tracing or recreating proprietary assessment material;
+- keep SVGs static: no scripts, remote resources, event handlers, or embedded external content;
+- provide meaningful alternative text;
+- derive the keyed candidate from the reference transformation where practical rather than relying on visual approximation;
+- independently verify that exactly one candidate satisfies the prompt and that reflections cannot accidentally qualify as rotations;
+- keep visual details legible at narrow widths and browser zoom.
+
 ## Code contributions
 
-Keep the practice engine data-driven. Adding a new practice set should normally require adding question data, not modifying application code.
+Keep the practice engine data-driven. Adding a new practice set should normally require adding question data and, when needed, repository-owned assets rather than modifying application code.
 
-For behavior changes, add or update tests where practical. Preserve semantic HTML, keyboard operation, visible focus, responsive behavior, and useful error handling.
+For behavior changes, add or update tests where practical. Preserve semantic HTML, keyboard operation, visible focus, responsive behavior, useful error handling, and the rule that answers/explanations remain hidden until completion.
+
+Do not expand trusted-content boundaries casually. New asset types, remote resources, executable markup, or broader figure paths require an explicit security/design review rather than merely loosening validation.
+
+## Validation before a pull request
+
+From the repository root, run:
+
+```powershell
+npm test
+npm run validate:bank
+```
+
+For UI or spatial changes, also serve the application with `npx serve .` and manually exercise the affected flow, including keyboard navigation and a narrow viewport.
 
 ## Pull requests
 
