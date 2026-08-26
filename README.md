@@ -14,13 +14,17 @@ An independent, browser-based timed aptitude-practice application built around o
 
 ## Running locally
 
-Because the app loads its question bank with `fetch`, serve the repository through a local HTTP server rather than opening `index.html` directly as a `file://` URL.
+Because the app loads JavaScript modules and its question bank with `fetch`, serve the repository through a local HTTP server rather than opening `index.html` directly as a `file://` URL.
+
+From the repository root, run:
 
 ```powershell
-python -m http.server 8000
+npx serve .
 ```
 
-Then visit `http://localhost:8000/`.
+If `npx` asks permission to install `serve`, accept the prompt. Open the local URL printed by `serve` (commonly `http://localhost:3000`).
+
+Why not recommend `python -m http.server`? Python's MIME-type detection can inherit Windows registry mappings. On systems where `.js` is registered as `text/plain`, Chrome rejects ES modules with a strict MIME-type error. `npx serve .` avoids that environment-specific failure and is therefore the documented development path.
 
 ## Question banks
 
