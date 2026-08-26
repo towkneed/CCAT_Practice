@@ -10,6 +10,7 @@ An independent, browser-based timed aptitude-practice application built around o
 - Keep the practice engine separate from question-bank data.
 - Support multiple complete practice tests from one JSON bank.
 - Track correctness, unanswered questions, category performance, and timing.
+- Support original visual-spatial practice through constrained repository-owned SVG assets.
 - Keep the implementation understandable, accessible, testable, and dependency-light.
 
 ## Running locally
@@ -26,15 +27,21 @@ If `npx` asks permission to install `serve`, accept the prompt. Open the local U
 
 Why not recommend `python -m http.server`? Python's MIME-type detection can inherit Windows registry mappings. On systems where `.js` is registered as `text/plain`, Chrome rejects ES modules with a strict MIME-type error. `npx serve .` avoids that environment-specific failure and is therefore the documented development path.
 
+## Current application layout
+
+The maintained application entry point is `index.html`. Browser code lives under `src/`, the maintained question bank is `data/questions.json`, and repository-owned visual question assets live under `assets/spatial/`.
+
+The root-level `ccat-practice.html` and `questions.json` are retained as **legacy prototype artifacts** for project history. They are not the maintained application entry point or question bank and should not be used as the basis for new development. They may be removed in a future intentional cleanup after project history is preserved elsewhere.
+
 ## Question banks
 
 Practice sets live in `data/questions.json`. The schema is data-driven: a bank contains named tests, and each test contains metadata plus questions. The UI discovers available tests rather than hard-coding a particular number of tests.
 
-Questions include an ID, category, difficulty, prompt, answer choices, correct answer, and explanation. Explanations and correctness are not shown in the practice UI until a test is submitted or time expires.
+Questions include an ID, category, difficulty, prompt, answer choices, correct answer, and explanation. Questions may also reference a constrained repository-owned SVG figure for visual-spatial practice. Explanations and correctness are not shown in the practice UI until a test is submitted or time expires.
 
 The data contract is documented in [`docs/question-bank-schema.md`](docs/question-bank-schema.md).
 
-All included questions are original practice material. Do not submit questions copied, memorized/reconstructed, or transcribed from an actual CCAT administration or proprietary preparation product.
+All included questions and visual assets are original practice material. Do not submit questions or figures copied, memorized/reconstructed, or transcribed from an actual CCAT administration or proprietary preparation product.
 
 ## Validation
 
@@ -47,9 +54,9 @@ npm test
 npm run validate:bank
 ```
 
-`npm test` exercises deterministic validation, scoring, and time-formatting behavior. `npm run validate:bank` loads the real question bank and rejects structural problems such as duplicate IDs, invalid answer indexes, missing explanations, or unsupported schema versions.
+`npm test` exercises deterministic validation, scoring, diagnostic timing, time-formatting behavior, and spatial-figure schema constraints. `npm run validate:bank` loads the real question bank and rejects structural problems such as duplicate IDs, invalid answer indexes, missing explanations, unsupported schema versions, or invalid figure references.
 
-Structural validation does **not** prove that a question's keyed answer is intellectually correct. Question content should receive an independent second-pass solution review before release.
+Structural validation does **not** prove that a question's keyed answer is intellectually correct. Question content should receive an independent second-pass solution review before release. Spatial questions should additionally be checked to ensure that exactly one candidate satisfies the requested transformation.
 
 ## Development
 
@@ -57,8 +64,8 @@ Project engineering expectations are documented in [`docs/software-engineering-s
 
 AI-assisted contributions are welcome. The standard is the resulting software and content: it should be understandable, reviewable, tested where practical, and safe to maintain regardless of which tools helped produce it.
 
-A new valid practice set should normally be a data-only change. The browser application discovers available tests from the bank automatically.
+A new valid practice set should normally be a data-and-assets-only change. The browser application discovers available tests from the bank automatically.
 
 ## License
 
-Software source is released under the MIT License. Original question-bank content in this repository is provided for use with the project under the same license unless otherwise noted.
+Software source is released under the MIT License. Original question-bank content and original visual assets in this repository are provided for use with the project under the same license unless otherwise noted.
