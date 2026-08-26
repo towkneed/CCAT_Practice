@@ -1,18 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 190" role="img" aria-labelledby="title desc">
   <title id="title">Rotation practice figures</title>
-  <desc id="desc">A reference asymmetric polygon with a marked dot, followed by five labeled candidates. Candidate C is the reference rotated ninety degrees clockwise; the others change the dot position or mirror the shape.</desc>
+  <desc id="desc">A reference asymmetric polygon with a marked dot, followed by five labeled candidates. Candidate C is the reference rotated ninety degrees clockwise; the others alter the dot relationship or mirror the shape.</desc>
   <defs>
-    <g id="shape">
-      <path d="M0 0 H60 V25 H25 V75 H0 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
-      <circle cx="12" cy="12" r="6" fill="currentColor"/>
-    </g>
+    <path id="shape" d="M0 0 H60 V25 H25 V75 H0 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+    <g id="marked-shape"><use href="#shape"/><circle cx="12" cy="12" r="6" fill="currentColor"/></g>
   </defs>
-  <g transform="translate(25 25)"><use href="#shape"/></g>
-  <g transform="translate(165 25)"><use href="#shape"/><circle cx="48" cy="12" r="7" fill="Canvas"/><circle cx="48" cy="12" r="6" fill="currentColor"/></g>
-  <g transform="translate(310 25) scale(-1 1)"><use href="#shape"/></g>
-  <g transform="translate(405 20) rotate(90 37.5 37.5)"><use href="#shape"/></g>
-  <g transform="translate(545 20) rotate(180 30 37.5)"><use href="#shape"/><circle cx="12" cy="12" r="7" fill="Canvas"/><circle cx="48" cy="63" r="6" fill="currentColor"/></g>
-  <g transform="translate(665 20) rotate(-90 37.5 37.5)"><use href="#shape"/><circle cx="12" cy="12" r="7" fill="Canvas"/><circle cx="48" cy="12" r="6" fill="currentColor"/></g>
+  <g transform="translate(25 25)"><use href="#marked-shape"/></g>
+  <g transform="translate(165 25)"><use href="#shape"/><circle cx="48" cy="12" r="6" fill="currentColor"/></g>
+  <g transform="translate(310 25) scale(-1 1)"><use href="#marked-shape"/></g>
+  <g transform="translate(405 20) rotate(90 37.5 37.5)"><use href="#marked-shape"/></g>
+  <g transform="translate(545 20) rotate(180 30 37.5)"><use href="#shape"/><circle cx="48" cy="63" r="6" fill="currentColor"/></g>
+  <g transform="translate(665 20) rotate(-90 37.5 37.5)"><use href="#shape"/><circle cx="48" cy="12" r="6" fill="currentColor"/></g>
   <g font-family="sans-serif" font-size="18" text-anchor="middle">
     <text x="55" y="155">Reference</text><text x="195" y="155">A</text><text x="280" y="155">B</text><text x="442" y="155">C</text><text x="575" y="155">D</text><text x="702" y="155">E</text>
   </g>
