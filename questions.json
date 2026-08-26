@@ -1,0 +1,19 @@
+[
+ {"question":"What number comes next? 3, 7, 15, 31, 63, ?","choices":["95","111","126","127","129"],"answer":3},
+ {"question":"BOOK is to READING as FORK is to:","choices":["Drawing","Writing","Stirring","Eating","Cutting"],"answer":3},
+ {"question":"If 5 machines make 5 parts in 5 minutes, how many parts do 10 machines make in 10 minutes?","choices":["10","15","20","50","100"],"answer":2},
+ {"question":"Which number is smallest?","choices":["0.29","1/3","0.3","3/10","31%"],"answer":0},
+ {"question":"A jacket costs $80, is discounted 25%, then another 10%. Final price?","choices":["$52","$54","$56","$58","$60"],"answer":1},
+ {"question":"Which does not belong?","choices":["8","27","64","100","125"],"answer":3},
+ {"question":"A train travels 180 miles in 3 hours. At the same rate, how far in 50 minutes?","choices":["40 miles","45 miles","50 miles","55 miles","60 miles"],"answer":2},
+ {"question":"What number comes next? 2, 6, 12, 20, 30, ?","choices":["36","40","42","44","48"],"answer":2},
+ {"question":"If 4 workers complete a job in 6 days, how many days for 8 equally productive workers?","choices":["2","3","4","8","12"],"answer":1},
+ {"question":"ASSUME is to PRESUME as ASK is to:","choices":["Answer","Request","Tell","Refuse","Know"],"answer":1},
+ {"question":"What number comes next? 4, 7, 13, 25, 49, ?","choices":["73","81","91","97","99"],"answer":3},
+ {"question":"If all ZORPS are MIBS, and no MIBS are TAVS, which must be true?","choices":["No ZORPS are TAVS","Some ZORPS are TAVS","All TAVS are ZORPS","Some MIBS are ZORPS","No TAVS exist"],"answer":0},
+ {"question":"A store buys an item for $60 and sells it for $75. Profit is what percentage of cost?","choices":["15%","20%","25%","30%","35%"],"answer":2},
+ {"question":"Which word is most nearly opposite in meaning to SCARCE?","choices":["Rare","Limited","Abundant","Small","Valuable"],"answer":2},
+ {"question":"Which number is largest?","choices":["5/8","0.61","62%","3/5","0.63"],"answer":4},
+ {"question":"A car uses 12 gallons for 300 miles. At the same rate, gallons needed for 425 miles?","choices":["15","16","17","18","20"],"answer":2},
+ {"question":"What number comes next? 1, 4, 10, 22, 46, ?","choices":["70","82","90","94","96"],"answer":3}
+]
