@@ -23,6 +23,14 @@ export function validateBank(bank) {
       if (!Array.isArray(q.choices) || q.choices.length < 2 || q.choices.some(c => typeof c !== 'string' || !c.trim())) errors.push(`${prefix}: choices must contain at least two non-empty strings.`);
       if (!Number.isInteger(q.answer) || !Array.isArray(q.choices) || q.answer < 0 || q.answer >= q.choices.length) errors.push(`${prefix}: answer must be a valid zero-based choice index.`);
       if (typeof q.explanation !== 'string' || !q.explanation.trim()) errors.push(`${prefix}: explanation is required.`);
+      if (q.figure !== undefined) {
+        if (!q.figure || typeof q.figure !== 'object' || Array.isArray(q.figure)) errors.push(`${prefix}: figure must be an object.`);
+        else {
+          if (q.figure.type !== 'svg') errors.push(`${prefix}: figure.type must be svg.`);
+          if (typeof q.figure.src !== 'string' || !/^\.\/assets\/spatial\/[A-Za-z0-9._-]+\.svg$/.test(q.figure.src)) errors.push(`${prefix}: figure.src must be a relative SVG path under ./assets/spatial/.`);
+          if (typeof q.figure.alt !== 'string' || !q.figure.alt.trim()) errors.push(`${prefix}: figure.alt is required.`);
+        }
+      }
     });
   }
   if (Object.keys(bank.tests).length === 0) errors.push('At least one test is required.');
