@@ -43,12 +43,21 @@
       <p class="muted">Unanswered questions are allowed. There is no penalty for navigating backward.</p>
     </section>
 
-    <section id="results" class="panel" hidden aria-labelledby="results-heading">
-      <h2 id="results-heading">Results</h2>
-      <div id="score-summary" class="score-summary" aria-live="polite"></div>
-      <div id="category-summary"></div>
-      <h3>Review</h3>
-      <div id="review"></div>
+    <section id="results" hidden aria-labelledby="results-heading">
+      <div class="results-grid">
+        <div class="panel results-main">
+          <h2 id="results-heading">Results</h2>
+          <div id="score-summary" class="score-summary" aria-live="polite"></div>
+          <div id="category-summary"></div>
+          <h3>Review</h3>
+          <div id="review"></div>
+        </div>
+        <aside class="panel performance-report" aria-labelledby="performance-heading">
+          <h2 id="performance-heading">Performance report</h2>
+          <div id="composition-report"></div>
+          <div id="performance-insights"></div>
+        </aside>
+      </div>
       <button id="restart-button" type="button">Choose another test</button>
     </section>
 
