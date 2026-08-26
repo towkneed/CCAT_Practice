@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { formatDuration, scoreTest, validateBank } from '../src/core.js';
+import { buildDiagnostics, formatDuration, scoreTest, validateBank } from '../src/core.js';
 
 function validBank() {
   return {
@@ -52,6 +52,27 @@ test('scoreTest does not treat string indexes as answered choices', () => {
   const result = scoreTest(validBank().tests.sample, ['1', 0]);
   assert.equal(result.answered, 1);
   assert.equal(result.correct, 1);
+});
+
+test('buildDiagnostics computes category timing and correct-versus-missed timing', () => {
+  const result = buildDiagnostics(validBank().tests.sample, [1, 1], [12000, 30000]);
+  assert.equal(result.correct, 1);
+  assert.equal(result.averageCorrectTimeMs, 12000);
+  assert.equal(result.averageMissedTimeMs, 30000);
+  assert.equal(result.totalRecordedTimeMs, 42000);
+  assert.deepEqual(result.categoryRows, [
+    { category: 'Numerical', correct: 1, total: 1, accuracy: 1, averageTimeMs: 12000 },
+    { category: 'Verbal', correct: 0, total: 1, accuracy: 0, averageTimeMs: 30000 }
+  ]);
+});
+
+test('buildDiagnostics safely handles missing and invalid timing samples', () => {
+  const result = buildDiagnostics(validBank().tests.sample, [1, null], [Number.NaN, -500]);
+  assert.equal(result.totalRecordedTimeMs, 0);
+  assert.equal(result.averageCorrectTimeMs, null);
+  assert.equal(result.averageMissedTimeMs, null);
+  assert.equal(result.categoryRows[0].averageTimeMs, 0);
+  assert.equal(result.categoryRows[1].averageTimeMs, 0);
 });
 
 test('formatDuration formats minutes and seconds and clamps negative values', () => {
