@@ -1,10 +1,10 @@
-import { formatDuration, scoreTest, validateBank } from './core.js';
+import { buildDiagnostics, formatDuration, validateBank } from './core.js';
 
 const $ = id => document.getElementById(id);
 const ui = {
   setup: $('setup'), test: $('test'), results: $('results'), select: $('test-select'), description: $('test-description'),
   start: $('start-button'), status: $('load-status'), progress: $('progress'), timer: $('timer'), form: $('question-form'),
-  question: $('question-text'), choices: $('choices'), previous: $('previous-button'), next: $('next-button'), finish: $('finish-button'),
+  question: $('question-text'), figure: $('question-figure'), choices: $('choices'), previous: $('previous-button'), next: $('next-button'), finish: $('finish-button'),
   score: $('score-summary'), categories: $('category-summary'), review: $('review'), restart: $('restart-button'),
   composition: $('composition-report'), insights: $('performance-insights')
 };
@@ -57,15 +57,21 @@ function recordQuestionTime() {
   questionEnteredAt = performance.now();
 }
 
-function moveTo(nextIndex) {
-  recordQuestionTime(); index = nextIndex; renderQuestion();
+function moveTo(nextIndex) { recordQuestionTime(); index = nextIndex; renderQuestion(); }
+
+function renderFigure(container, figure) {
+  container.replaceChildren();
+  if (!figure) { container.hidden = true; return; }
+  const image = document.createElement('img');
+  image.src = figure.src; image.alt = figure.alt; image.className = 'question-figure-image';
+  container.append(image); container.hidden = false;
 }
 
 function renderQuestion() {
   questionEnteredAt = performance.now();
   const q = activeTest.questions[index];
   ui.progress.textContent = `${index + 1} / ${activeTest.questions.length}`;
-  ui.question.textContent = q.prompt;
+  ui.question.textContent = q.prompt; renderFigure(ui.figure, q.figure);
   ui.choices.replaceChildren(...q.choices.map((choice, choiceIndex) => {
     const label = document.createElement('label'); label.className = 'choice';
     const input = document.createElement('input'); input.type = 'radio'; input.name = 'answer'; input.value = String(choiceIndex); input.checked = answers[index] === choiceIndex;
@@ -91,16 +97,11 @@ function renderDiagnostics(result) {
   const table = document.createElement('table'); table.className = 'report-table';
   table.innerHTML = '<thead><tr><th>Type</th><th>Questions</th><th>Correct</th><th>Accuracy</th><th>Avg time</th></tr></thead>';
   const body = document.createElement('tbody');
-  const categoryStats = [];
-  for (const [category, value] of result.categories) {
-    const indexes = activeTest.questions.map((q, i) => q.category === category ? i : -1).filter(i => i >= 0);
-    const totalMs = indexes.reduce((sum, i) => sum + questionTimes[i], 0);
-    const avgSeconds = indexes.length ? Math.round(totalMs / indexes.length / 1000) : 0;
-    categoryStats.push({ category, ...value, avgSeconds });
+  result.categoryRows.forEach(stat => {
     const row = document.createElement('tr');
-    row.innerHTML = `<td>${category}</td><td>${value.total}</td><td>${value.correct}</td><td>${pct(value.correct, value.total)}%</td><td>${formatDuration(avgSeconds)}</td>`;
+    row.innerHTML = `<td>${stat.category}</td><td>${stat.total}</td><td>${stat.correct}</td><td>${pct(stat.correct, stat.total)}%</td><td>${formatDuration(seconds(stat.averageTimeMs))}</td>`;
     body.append(row);
-  }
+  });
   table.append(body); ui.composition.replaceChildren(compositionHeading, table);
 
   const heading = document.createElement('h3'); heading.textContent = 'What this score shows';
@@ -109,22 +110,18 @@ function renderDiagnostics(result) {
   const strengths = document.createElement('ul');
   const improvementsHeading = document.createElement('h4'); improvementsHeading.textContent = 'Areas to improve';
   const improvements = document.createElement('ul');
-  for (const stat of categoryStats) {
+  result.categoryRows.forEach(stat => {
     const accuracy = pct(stat.correct, stat.total);
-    const item = document.createElement('li'); item.textContent = `${stat.category}: ${accuracy}% accuracy, average ${formatDuration(stat.avgSeconds)} per question.`;
+    const item = document.createElement('li'); item.textContent = `${stat.category}: ${accuracy}% accuracy, average ${formatDuration(seconds(stat.averageTimeMs))} per question.`;
     (accuracy >= 85 ? strengths : improvements).append(item);
-  }
+  });
   if (!strengths.children.length) { const li = document.createElement('li'); li.textContent = 'No category crossed the 85% accuracy threshold on this run; use the category data below to target practice.'; strengths.append(li); }
   if (!improvements.children.length) { const li = document.createElement('li'); li.textContent = 'No category fell below 85% accuracy on this run. Focus next on maintaining accuracy while increasing pace.'; improvements.append(li); }
 
   const timingHeading = document.createElement('h4'); timingHeading.textContent = 'Timing';
   const timing = document.createElement('ul');
-  const totalSeconds = seconds(questionTimes.reduce((a, b) => a + b, 0));
-  const correctIndexes = result.review.map((r, i) => r.isCorrect ? i : -1).filter(i => i >= 0);
-  const incorrectIndexes = result.review.map((r, i) => !r.isCorrect ? i : -1).filter(i => i >= 0);
-  const averageFor = indexes => indexes.length ? Math.round(indexes.reduce((sum, i) => sum + questionTimes[i], 0) / indexes.length / 1000) : 0;
-  const timingItems = [`Total recorded question time: ${formatDuration(totalSeconds)}.`, `Average per question: ${formatDuration(Math.round(totalSeconds / result.total))}.`, `Average on correct: ${formatDuration(averageFor(correctIndexes))}.`];
-  if (incorrectIndexes.length) timingItems.push(`Average on incorrect/unanswered: ${formatDuration(averageFor(incorrectIndexes))}.`);
+  const timingItems = [`Total recorded question time: ${formatDuration(seconds(result.totalRecordedTimeMs))}.`, `Average per question: ${formatDuration(seconds(result.totalRecordedTimeMs / result.total))}.`, `Average on correct: ${result.averageCorrectTimeMs === null ? 'n/a' : formatDuration(seconds(result.averageCorrectTimeMs))}.`];
+  if (result.averageMissedTimeMs !== null) timingItems.push(`Average on incorrect answers: ${formatDuration(seconds(result.averageMissedTimeMs))}.`);
   timingItems.forEach(text => { const li = document.createElement('li'); li.textContent = text; timing.append(li); });
   ui.insights.replaceChildren(heading, overall, strengthsHeading, strengths, improvementsHeading, improvements, timingHeading, timing);
 }
@@ -132,7 +129,7 @@ function renderDiagnostics(result) {
 function finishTest(reason = 'Test submitted.') {
   if (finished) return;
   recordQuestionTime(); finished = true; clearInterval(timerId); timerId = null;
-  const result = scoreTest(activeTest, answers);
+  const result = buildDiagnostics(activeTest, answers, questionTimes);
   ui.test.hidden = true; ui.results.hidden = false;
   ui.score.textContent = `${reason} ${result.correct} correct of ${result.total}; ${result.answered} answered; ${result.unanswered} unanswered.`;
   const heading = document.createElement('h3'); heading.textContent = 'By category';
@@ -142,12 +139,13 @@ function finishTest(reason = 'Test submitted.') {
   ui.review.replaceChildren(...result.review.map((item, i) => {
     const article = document.createElement('article'); article.className = 'review-item';
     const h = document.createElement('h4'); h.textContent = `${i + 1}. ${item.question.prompt}`;
+    const figure = document.createElement('div'); figure.className = 'review-figure'; renderFigure(figure, item.question.figure);
     const meta = document.createElement('p'); meta.className = 'review-meta'; meta.textContent = `Type: ${item.question.category} · Time taken: ${formatDuration(seconds(questionTimes[i]))} · Difficulty: ${item.question.difficulty}`;
     const outcome = document.createElement('p'); outcome.className = item.isCorrect ? 'correct' : '';
     const selectedText = item.isAnswered ? item.question.choices[item.selected] : 'Unanswered';
     outcome.textContent = `${item.isCorrect ? 'Correct' : 'Incorrect'} — your answer: ${selectedText}. Correct answer: ${item.question.choices[item.question.answer]}.`;
     const explanation = document.createElement('p'); explanation.textContent = item.question.explanation;
-    article.append(h, meta, outcome, explanation); return article;
+    article.append(h); if (item.question.figure) article.append(figure); article.append(meta, outcome, explanation); return article;
   }));
   ui.results.scrollIntoView({ block: 'start' });
 }
