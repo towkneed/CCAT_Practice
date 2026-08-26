@@ -48,6 +48,44 @@ export function scoreTest(test, answers) {
   return { correct, answered, unanswered: test.questions.length - answered, total: test.questions.length, categories, review };
 }
 
+export function buildDiagnostics(test, answers, timeSpentMs = []) {
+  const score = scoreTest(test, answers);
+  const categories = new Map();
+  let correctTimeMs = 0;
+  let correctTimed = 0;
+  let missedTimeMs = 0;
+  let missedTimed = 0;
+
+  score.review.forEach((item, index) => {
+    const elapsedMs = Math.max(0, Number.isFinite(timeSpentMs[index]) ? timeSpentMs[index] : 0);
+    const current = categories.get(item.question.category) ?? { correct: 0, total: 0, timeMs: 0 };
+    current.total += 1;
+    current.timeMs += elapsedMs;
+    if (item.isCorrect) current.correct += 1;
+    categories.set(item.question.category, current);
+    if (item.isAnswered && elapsedMs > 0) {
+      if (item.isCorrect) { correctTimeMs += elapsedMs; correctTimed += 1; }
+      else { missedTimeMs += elapsedMs; missedTimed += 1; }
+    }
+  });
+
+  const categoryRows = [...categories.entries()].map(([category, value]) => ({
+    category,
+    correct: value.correct,
+    total: value.total,
+    accuracy: value.total ? value.correct / value.total : 0,
+    averageTimeMs: value.total ? value.timeMs / value.total : 0
+  }));
+
+  return {
+    ...score,
+    categoryRows,
+    averageCorrectTimeMs: correctTimed ? correctTimeMs / correctTimed : null,
+    averageMissedTimeMs: missedTimed ? missedTimeMs / missedTimed : null,
+    totalRecordedTimeMs: timeSpentMs.reduce((sum, value) => sum + Math.max(0, Number.isFinite(value) ? value : 0), 0)
+  };
+}
+
 export function formatDuration(seconds) {
   const safe = Math.max(0, Math.floor(Number.isFinite(seconds) ? seconds : 0));
   return `${Math.floor(safe / 60)}:${String(safe % 60).padStart(2, '0')}`;
