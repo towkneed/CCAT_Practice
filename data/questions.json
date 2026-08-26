@@ -2,9 +2,7 @@
   "schemaVersion": 1,
   "tests": {
     "test1": {
-      "title": "Practice Test 1",
-      "description": "Mixed verbal, numerical, and logic practice.",
-      "durationSeconds": 900,
+      "title": "Practice Test 1", "description": "Mixed verbal, numerical, and logic practice.", "durationSeconds": 900,
       "questions": [
         {"id":"t1-q01","category":"Numerical","difficulty":"easy","prompt":"A warehouse has 240 boxes. Three-eighths are shipped in the morning, then one-third of the remaining boxes are shipped in the afternoon. How many boxes remain?","choices":["80","90","100","110","120"],"answer":2,"explanation":"Three-eighths of 240 is 90, leaving 150. One-third of 150 is 50, leaving 100."},
         {"id":"t1-q02","category":"Numerical","difficulty":"easy","prompt":"What number comes next? 3, 7, 15, 31, 63, ?","choices":["95","111","126","127","129"],"answer":3,"explanation":"Each term is the previous term multiplied by 2, then increased by 1. 63 × 2 + 1 = 127."},
@@ -29,9 +27,7 @@
       ]
     },
     "test2": {
-      "title": "Practice Test 2",
-      "description": "A fresh mixed set with emphasis on fast pattern recognition.",
-      "durationSeconds": 900,
+      "title": "Practice Test 2", "description": "A fresh mixed set with emphasis on fast pattern recognition.", "durationSeconds": 900,
       "questions": [
         {"id":"t2-q01","category":"Numerical","difficulty":"easy","prompt":"What number comes next? 5, 10, 20, 40, ?","choices":["50","60","70","80","100"],"answer":3,"explanation":"Each term doubles, so 40 × 2 = 80."},
         {"id":"t2-q02","category":"Verbal","difficulty":"easy","prompt":"GENEROUS is most nearly opposite in meaning to:","choices":["Kind","Selfish","Patient","Honest","Careful"],"answer":1,"explanation":"Selfish is the closest opposite of generous among the choices."},
@@ -53,6 +49,16 @@
         {"id":"t2-q18","category":"Verbal","difficulty":"easy","prompt":"Which word does not belong?","choices":["Oak","Maple","Pine","Rose","Birch"],"answer":3,"explanation":"Oak, maple, pine, and birch are trees; rose is ordinarily classified as a shrub/flowering plant rather than a tree."},
         {"id":"t2-q19","category":"Numerical","difficulty":"medium","prompt":"What number comes next? 2, 5, 11, 23, 47, ?","choices":["71","83","91","95","97"],"answer":3,"explanation":"Each term is twice the previous term plus 1. 47 × 2 + 1 = 95."},
         {"id":"t2-q20","category":"Logic","difficulty":"hard","prompt":"No PELS are DAX. Some DAX are NIMS. Which statement must be true?","choices":["Some NIMS are not PELS","All NIMS are PELS","No NIMS are PELS","Some PELS are NIMS","All DAX are NIMS"],"answer":0,"explanation":"At least one thing is both DAX and NIM. Because no DAX can be a PEL, that thing is a NIM that is not a PEL."}
+      ]
+    },
+    "spatial1": {
+      "title": "Spatial Diagnostic 1",
+      "description": "Three original rotation questions for checking visual-spatial reasoning and the figure-rendering path.",
+      "durationSeconds": 90,
+      "questions": [
+        {"id":"s1-q01","category":"Spatial","difficulty":"easy","prompt":"Which candidate is the same marked shape as the reference after a 90° clockwise rotation?","figure":{"type":"svg","src":"./assets/spatial/rotation-01.svg","alt":"Reference asymmetric L shape with a dot, followed by candidates A through E."},"choices":["A","B","C","D","E"],"answer":2,"explanation":"C is constructed by rotating the complete reference shape, including its marker, 90 degrees clockwise. The other candidates alter orientation, handedness, or marker placement."},
+        {"id":"s1-q02","category":"Spatial","difficulty":"medium","prompt":"Which candidate is the same marked shape as the reference after a 270° clockwise rotation?","figure":{"type":"svg","src":"./assets/spatial/rotation-02.svg","alt":"Reference stepped shape with a dot, followed by candidates A through E."},"choices":["A","B","C","D","E"],"answer":3,"explanation":"D is the complete reference rotated 270 degrees clockwise (equivalently 90 degrees counterclockwise). The shape and marker move together."},
+        {"id":"s1-q03","category":"Spatial","difficulty":"medium","prompt":"Which candidate is the same marked shape as the reference after a 180° rotation?","figure":{"type":"svg","src":"./assets/spatial/rotation-03.svg","alt":"Reference angular shape with a dot, followed by candidates A through E."},"choices":["A","B","C","D","E"],"answer":1,"explanation":"B is the complete reference rotated 180 degrees. The remaining candidates are reflections or different rotations."}
       ]
     }
   }
