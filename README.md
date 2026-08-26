@@ -26,15 +26,34 @@ Then visit `http://localhost:8000/`.
 
 Practice sets live in `data/questions.json`. The schema is data-driven: a bank contains named tests, and each test contains metadata plus questions. The UI discovers available tests rather than hard-coding a particular number of tests.
 
-Questions include an ID, category, prompt, answer choices, correct answer, and explanation. Explanations and correctness are not shown until a test is submitted or time expires.
+Questions include an ID, category, difficulty, prompt, answer choices, correct answer, and explanation. Explanations and correctness are not shown in the practice UI until a test is submitted or time expires.
 
-All included questions are original practice material. Do not submit questions copied or reconstructed from an actual CCAT administration or proprietary preparation product.
+The data contract is documented in [`docs/question-bank-schema.md`](docs/question-bank-schema.md).
+
+All included questions are original practice material. Do not submit questions copied, memorized/reconstructed, or transcribed from an actual CCAT administration or proprietary preparation product.
+
+## Validation
+
+The project deliberately uses Node's built-in test runner and currently has no runtime or development package dependencies.
+
+With Node.js 20 or later:
+
+```powershell
+npm test
+npm run validate:bank
+```
+
+`npm test` exercises deterministic validation, scoring, and time-formatting behavior. `npm run validate:bank` loads the real question bank and rejects structural problems such as duplicate IDs, invalid answer indexes, missing explanations, or unsupported schema versions.
+
+Structural validation does **not** prove that a question's keyed answer is intellectually correct. Question content should receive an independent second-pass solution review before release.
 
 ## Development
 
-Project engineering expectations are documented in `docs/software-engineering-standards.md`. See `CONTRIBUTING.md` before proposing changes or question banks.
+Project engineering expectations are documented in [`docs/software-engineering-standards.md`](docs/software-engineering-standards.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) before proposing changes or question banks.
 
 AI-assisted contributions are welcome. The standard is the resulting software and content: it should be understandable, reviewable, tested where practical, and safe to maintain regardless of which tools helped produce it.
+
+A new valid practice set should normally be a data-only change. The browser application discovers available tests from the bank automatically.
 
 ## License
 
