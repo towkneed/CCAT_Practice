@@ -9,6 +9,7 @@ const ui = {
   composition: $('composition-report'), insights: $('performance-insights')
 };
 
+const BANK_PATHS = ['./data/questions.json', './data/fresh-test-3.json'];
 let bank = null;
 let activeTest = null;
 let answers = [];
@@ -23,9 +24,19 @@ function setStatus(message, isError = false) { ui.status.textContent = message; 
 
 async function loadBank() {
   try {
-    const response = await fetch('./data/questions.json', { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Question bank request failed with HTTP ${response.status}.`);
-    const candidate = await response.json();
+    const banks = await Promise.all(BANK_PATHS.map(async path => {
+      const response = await fetch(path, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Question bank request for ${path} failed with HTTP ${response.status}.`);
+      return response.json();
+    }));
+    const candidate = { schemaVersion: 1, tests: {} };
+    for (const source of banks) {
+      if (source.schemaVersion !== 1) throw new Error('All question-bank files must use schemaVersion 1.');
+      for (const [key, test] of Object.entries(source.tests ?? {})) {
+        if (candidate.tests[key]) throw new Error(`Duplicate test key across question-bank files: ${key}.`);
+        candidate.tests[key] = test;
+      }
+    }
     const errors = validateBank(candidate);
     if (errors.length) throw new Error(`Invalid question bank: ${errors.join(' ')}`);
     bank = candidate;
