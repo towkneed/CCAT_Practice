@@ -21,6 +21,24 @@ test('validateBank accepts a structurally valid bank', () => {
   assert.deepEqual(validateBank(validBank()), []);
 });
 
+test('validateBank accepts a constrained SVG figure', () => {
+  const bank = validBank();
+  bank.tests.sample.questions[0].figure = { type: 'svg', src: './assets/spatial/rotation-01.svg', alt: 'Reference shape and answer figures.' };
+  assert.deepEqual(validateBank(bank), []);
+});
+
+test('validateBank rejects figure paths outside the spatial asset directory', () => {
+  const bank = validBank();
+  bank.tests.sample.questions[0].figure = { type: 'svg', src: 'https://example.com/question.svg', alt: 'Remote figure.' };
+  assert.match(validateBank(bank).join(' '), /figure\.src/);
+});
+
+test('validateBank requires accessible alternative text for figures', () => {
+  const bank = validBank();
+  bank.tests.sample.questions[0].figure = { type: 'svg', src: './assets/spatial/rotation-01.svg', alt: '' };
+  assert.match(validateBank(bank).join(' '), /figure\.alt is required/);
+});
+
 test('validateBank rejects unsupported schema versions', () => {
   const bank = validBank(); bank.schemaVersion = 2;
   assert.match(validateBank(bank).join(' '), /schemaVersion/);
