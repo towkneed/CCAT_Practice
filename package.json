@@ -1,0 +1,14 @@
+{
+  "name": "ccat-practice",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent browser-based timed aptitude practice with original CCAT-style questions.",
+  "scripts": {
+    "test": "node --test",
+    "validate:bank": "node scripts/validate-bank.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
